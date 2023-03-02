@@ -12,7 +12,7 @@ spec:
   project: default
   source:
     chart: metalld
-    repoURL: https://github.com/metallb
+    repoURL: https://github.com/metallb/metallb
     targetRevision: 0.0.0
   syncPolicy:
     syncOptions:
