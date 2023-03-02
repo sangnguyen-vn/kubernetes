@@ -1,10 +1,10 @@
 apiVersion: argoproj.io/v1alpha1
-kind: Application
+kind: Applications
 metadata:
   name: argo-cert-manager
   namespace: argocd
-  finalizers:
-  - resources-finalizer.argocd.argoproj.io
+  #finalizers:
+  #- resources-finalizer.argocd.argoproj.io
   annotations:
 spec:
   destination:
