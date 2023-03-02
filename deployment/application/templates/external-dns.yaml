@@ -17,13 +17,13 @@ spec:
     helm:
       releaseName: external-dns
       values: |
-        policy: sync
-        txtOwnerId: "sang"
-        provider: cloudflare
-        cloudflare:
-          proxied: true
-          apiToken: -jGxsEfepzqLnHk0-CyknatdVBZ65o6OwprUaNWX
-          email: nhsang862012@gmail.com
+        #policy: sync
+        #txtOwnerId: "sang"
+        #provider: cloudflare
+        #cloudflare:
+        #  proxied: false
+        #  apiToken: -jGxsEfepzqLnHk0-CyknatdVBZ65o6OwprUaNWX
+        #  email: nhsang862012@gmail.com
   syncPolicy:
     syncOptions:
       - CreateNamespace=true
