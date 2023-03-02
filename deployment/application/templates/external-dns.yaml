@@ -1,0 +1,40 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: external-dns
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: {{ .Values.spec.destination.server }}
+    namespace: external-dns
+  project: default
+  source:
+    chart: external-dns
+    repoURL: https://charts.bitnami.com/bitnami
+    targetRevision: 6.13.4
+    helm:
+      releaseName: external-dns
+      values: |
+        policy: sync
+        txtOwnerId: "sang"
+        provider: cloudflare
+        cloudflare:
+          proxied: true
+          apiToken: -jGxsEfepzqLnHk0-CyknatdVBZ65o6OwprUaNWX
+          email: nhsang862012@gmail.com
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - Validate=true
+    automated:
+      selfHeal: true
+      prune: true
+      allowEmpty: false
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
