@@ -1,0 +1,83 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: webapp01
+data:
+  index.php: |
+    <?php
+      echo "service 01 - " . gethostname() . "\n";
+      if (isset($_GET['loadtest'])) {
+        for($i = 0; $i < 1000000000; $i++) {
+            $a += $i;
+        }
+      }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: webapp01
+  name: webapp01
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: webapp01
+  template:
+    metadata:
+      labels:
+        app: webapp01
+    spec:
+      containers:
+      - name: webapp01
+        image: php:7-fpm
+        volumeMounts:
+        - mountPath: /var/www/html
+          name: run-file
+        command:
+        - bash
+        - -c
+        - php -S 0.0.0.0:80 index.php
+        resources:
+          limits:
+            cpu: 4000m
+            memory: 4Gi
+          requests:
+            cpu: 1000m
+      volumes:
+      - name: run-file
+        configMap:
+          name: webapp01
+          items:
+            - key: index.php
+              path: index.php
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp01
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    app: webapp01
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: webapp01
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: demo.cloudteam.work
+    http:
+      paths:
+      - backend:
+          service:
+            name: webapp01
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
