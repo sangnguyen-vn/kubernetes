@@ -20,7 +20,7 @@ spec:
       annotations:
         linkerd.io/inject: enabled
     syncOptions:    
-      - CreateNamespace=true
+      - CreateNamespace=false
       - Validate=true
     automated:
       selfHeal: true
