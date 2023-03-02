@@ -12,8 +12,8 @@ spec:
   project: default
   source:
     chart: metalld
-    repoURL: https://metallb.universe.tf
-    targetRevision: 0.0.0
+    repoURL: https://metallb.github.io/metallb
+    targetRevision: 0.12.1
   syncPolicy:
     syncOptions:
       - CreateNamespace=true
