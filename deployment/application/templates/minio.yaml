@@ -1,18 +1,18 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: argo-minio
+  name: minio
   namespace: argocd
   finalizers:
   - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
     server: {{ .Values.spec.destination.server }}
-    namespace: argo-minio
+    namespace: minio
   project: default
   source:
     chart: minio
-    repoURL: https://helm.min.io/
+    repoURL: https://operator.min.io/
     targetRevision: 8.0.10
     helm:
       values: |
