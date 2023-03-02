@@ -1,0 +1,50 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: uptime-kuma
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: {{ .Values.spec.destination.server }}
+    namespace: uptime
+  project: default
+  source:
+    chart: uptime-kuma
+    repoURL: https://dirsigler.github.io/uptime-kuma-helm
+    targetRevision: 2.5.7
+    helm:
+      releaseName: uptime-kuma
+      values: |
+        replicaCount: 1
+        ingress:
+          enabled: true
+          className: nginx
+          annotations:
+            external-dns.alpha.kubernetes.io/target: 42.96.37.192
+            kubernetes.io/tls-acme: "true"
+            cert-manager.io/cluster-issuer: letsencrypt-prod 
+          hosts:
+            - host: uptime.cloudteam.work
+              paths:
+                - path: /
+                  pathType: ImplementationSpecific
+          tls:  
+            - hosts: 
+              - uptime.cloudteam.work
+              secretName: uptime.cloudteam.work
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - Validate=true
+    automated:
+      selfHeal: true
+      prune: true
+      allowEmpty: false
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
