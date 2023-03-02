@@ -63,21 +63,3 @@ spec:
     targetPort: 80
   selector:
     app: webapp01
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: webapp01
-spec:
-  ingressClassName: nginx
-  rules:
-  - host: demo.cloudteam.work
-    http:
-      paths:
-      - backend:
-          service:
-            name: webapp01
-            port:
-              number: 80
-        path: /
-        pathType: Prefix
