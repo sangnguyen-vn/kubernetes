@@ -12,7 +12,7 @@ spec:
   project: default
   source:
     chart: minio
-    repoURL: https://github.com/minio/minio
+    repoURL: https://helm.min.io/
     targetRevision: 8.0.10
     helm:
       values: |
