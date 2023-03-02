@@ -4,11 +4,14 @@ metadata:
   name: letsencrypt-prod
 spec:
   acme:
+    email: nhsang862012@gmail.com
     server: https://acme-v02.api.letsencrypt.org/directory
-    email: sang.nguyen@cloudteam.vn
     privateKeySecretRef:
       name: letsencrypt-prod
     solvers:
-      - http01:
-          ingress:
-            class: nginx
+    - dns01:
+         cloudflare:
+           email: nhsang862012@gmail.com
+           apiTokenSecretRef:
+             name: cloudflare-secret
+             key: api-key
