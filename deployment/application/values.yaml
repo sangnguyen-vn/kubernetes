@@ -2,5 +2,5 @@ spec:
   destination:
     server: https://kubernetes.default.svc
   source:
-    repoURL: https://github.com/sangnguyen-vn/kubernetes/deployment/application
+    repoURL: https://github.com/sangnguyen-vn/kubernetes
     targetRevision: HEAD
