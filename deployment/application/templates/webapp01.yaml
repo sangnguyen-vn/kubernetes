@@ -1,0 +1,34 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: webapp01
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+  annotations:
+spec:
+  destination:
+    server: {{ .Values.spec.destination.server }}
+    namespace: webapp01
+  project: default
+  source:
+    path: deployment/webapp01
+    repoURL: {{ .Values.spec.source.repoURL }}
+    targetRevision: {{ .Values.spec.source.targetRevision }}
+  syncPolicy:
+    managedNamespaceMetadata:
+      annotations:
+        linkerd.io/inject: enabled
+    syncOptions:    
+      - CreateNamespace=true
+      - Validate=true
+    automated:
+      selfHeal: true
+      prune: true
+      allowEmpty: true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
