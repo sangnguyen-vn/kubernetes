@@ -2,15 +2,15 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: minio-dev # Change this value if you want a different namespace name
+  name: minio # Change this value if you want a different namespace name
   labels:
-    name: minio-dev # Change this value to match metadata.name
+    name: minio # Change this value to match metadata.name
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: minio
-  namespace: minio-dev
+  namespace: minio
   labels:
     app: minio
 spec:
@@ -33,7 +33,7 @@ spec:
 #            - name: MINIO_ACCESS_KEY
 #              value: "minio"
 #            - name: MINIO_SECRET_KEY
-#              value: "minio123"
+#              value: "minio#123"
           livenessProbe:
             httpGet:
               path: /minio/health/live
@@ -71,7 +71,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: minio
-  namespace: minio-dev
+  namespace: minio
 spec:
   selector:
     app: minio
