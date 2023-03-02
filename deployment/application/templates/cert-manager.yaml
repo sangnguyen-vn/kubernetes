@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: argo-cert-manager
+  name: cert-manager
   namespace: argocd
   #finalizers:
   #- resources-finalizer.argocd.argoproj.io
@@ -9,7 +9,7 @@ metadata:
 spec:
   destination:
     server: {{ .Values.spec.destination.server }}
-    namespace: argo-cert-manager
+    namespace: cert-manager
   project: default
   source:
     path: deployment/cert-manager
