@@ -8,7 +8,7 @@ metadata:
 spec:
   destination:
     server: {{ .Values.spec.destination.server }}
-    namespace: metallb-system
+    namespace: metallb
   project: default
   source:
     path: deployment/metallb
