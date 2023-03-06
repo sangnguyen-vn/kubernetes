@@ -7,7 +7,7 @@ spec:
   # Secret names are always required.
   secretName: ssl-cert-prod
   issuerRef:
-    name: letsencrypt-pro
+    name: letsencrypt-prod
     kind: ClusterIssuer
   commondName: 42.96.37.192.cloudteam.work
   dnsNames:
