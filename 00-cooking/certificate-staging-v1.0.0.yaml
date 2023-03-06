@@ -4,11 +4,10 @@ metadata:
   name: ssl-cert-staging
   namespace: default
 spec:
-  # Secret names are always required.
   secretName: ssl-cert-staging
   issuerRef:
     name: letsencrypt-staging
     kind: ClusterIssuer
-  commondName: 42.96.37.192.cloudteam.work
+  commonName: 42.96.37.192.cloudteam.work
   dnsNames:
   - 42.96.37.192.cloudteam.work
