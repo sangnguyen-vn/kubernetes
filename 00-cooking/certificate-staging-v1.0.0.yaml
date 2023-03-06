@@ -8,7 +8,7 @@ spec:
   secretName: ssl-cert-staging
   issuerRef:
     name: letsencrypt-staging
-      kind: ClusterIssuer
-    commondName: minio.cloudteam.work
-    dnsName:
-    - minio.cloudteam.work
+    kind: ClusterIssuer
+  commondName: 42.96.37.192.cloudteam.work
+  dnsNames:
+  - 42.96.37.192.cloudteam.work
