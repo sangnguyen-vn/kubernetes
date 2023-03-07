@@ -29,11 +29,11 @@ spec:
         - name: minio
           image: quay.io/minio/minio:latest
           imagePullPolicy: IfNotPresent
-#          env:
-#            - name: MINIO_ACCESS_KEY
-#              value: "minio"
-#            - name: MINIO_SECRET_KEY
-#              value: "minio#123"
+          env:
+            - name: MINIO_ACCESS_KEY
+              value: "minio"
+            - name: MINIO_SECRET_KEY
+              value: "minio#123"
           livenessProbe:
             httpGet:
               path: /minio/health/live
@@ -48,8 +48,8 @@ spec:
             periodSeconds: 20
           resources:
             requests:
-              memory: "1000Mi"
-              cpu: "1000m"
+              memory: "500Mi"
+              cpu: "500m"
             limits:
               memory: "1500Mi"
               cpu: "1500m"
