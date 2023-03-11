@@ -14,9 +14,12 @@ spec:
         app: minio
     spec:
       volumes:
-        - name: ca-certificates
-          configMap:
-            name: ca-certificates
+#        - name: ca-certificates
+#          configMap:
+#            name: ca-certificates
+	- name: minio-alpha-ssl
+          secret:
+            secretName: minio-alpha-ssl
         - name: data
           hostPath:
             path: /mnt/minio/data1 # Specify a path to a local drive or volume on the Kubernetes worker node
@@ -24,18 +27,18 @@ spec:
       containers:
       - name: minio
         env:
-            - name: MINIO_BROWSER_ROOTCERTS
-              value: /etc/ssl/certs/ca.crt
+          - name: MINIO_BROWSER_ROOTCERTS
+            value: /etc/ssl/certs/alpha-root.crt
         image: quay.io/minio/minio:latest
         volumeMounts:
-          - name: ca-certificates #name of volume of pod
-            mountPath: /etc/ssl/certs #directory in container
-            readOnly: true
+#          - name: ca-certificates #name of volume of pod
+#            mountPath: /etc/ssl/certs #directory in container
+#            readOnly: true
           - mountPath: /data #directory in container
             name: data #name of volumes of pod
-          - mountPath: /etc/ssl/certs/alpha-root.crt
-		    name: alpha-ssl
-            subPath: alpha-root.crt          
+          - mountPath: /etc/ssl/certs/ca-certificates.crt
+	    name: minio-alpha-ssl
+            subPath: alpha-root.crt       
         imagePullPolicy: IfNotPresent
         env:
         - name: MINIO_ACCESS_KEY
