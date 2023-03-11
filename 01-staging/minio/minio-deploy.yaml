@@ -17,7 +17,7 @@ spec:
 #        - name: ca-certificates
 #          configMap:
 #            name: ca-certificates
-	- name: ca-certs
+        - name: ca-certs
           secret:
             secretName: minio-alpha-ssl
         - name: data
@@ -37,7 +37,7 @@ spec:
           - mountPath: /data #directory in container
             name: data #name of volumes of pod
           - mountPath: /etc/ssl/certs/ca-certificates.crt
-	    name: ca-certs
+            name: ca-certs
             subPath: alpha-root.crt       
         imagePullPolicy: IfNotPresent
         env:
