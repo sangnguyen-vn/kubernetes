@@ -4,34 +4,35 @@ metadata:
   name: minio
   namespace: minio
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
+#    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-certificate: "ingress-alpha-root"
 spec:
   ingressClassName: nginx
   rules:
-    - host: minio.cloudteam.work
+    - host: vpo-minio.cloudteam.vn
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: mini0
+                name: minio
                 port:
                   number: 9090
-    - host: minios3.cloudteam.work
+    - host: vpo-minios3.cloudteam.vn
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: mini0
+                name: minio
                 port:
                   number: 9000
   tls:
     - hosts:
-      - minio.cloudteam.work
-      secretName: echo-minio-tls
+      - vpo-minio.cloudteam.vn
+      secretName: minio-tls
     - hosts:
-      - minios3.cloudteam.work
-      secretName: echo-minios3-tls
+      - vpo-minios3.cloudteam.vn
+      secretName: minio-tls
