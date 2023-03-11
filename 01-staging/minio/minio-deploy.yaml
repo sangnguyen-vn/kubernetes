@@ -26,9 +26,6 @@ spec:
             type: DirectoryOrCreate # The path to the last directory must exist
       containers:
       - name: minio
-        env:
-          - name: MINIO_BROWSER_ROOTCERTS
-            value: /etc/ssl/certs/alpha-root.crt
         image: quay.io/minio/minio:latest
         volumeMounts:
 #          - name: ca-certificates #name of volume of pod
@@ -41,6 +38,8 @@ spec:
             subPath: alpha-root.crt       
         imagePullPolicy: IfNotPresent
         env:
+        - name: MINIO_BROWSER_ROOTCERTS
+          value: /etc/ssl/certs/ca-bundle.trust.crt
         - name: MINIO_ACCESS_KEY
           value: "minio"
         - name: MINIO_SECRET_KEY
