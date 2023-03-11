@@ -17,25 +17,31 @@ spec:
 #        - name: ca-certificates
 #          configMap:
 #            name: ca-certificates
-        - name: ca-certs
-          secret:
-            secretName: minio-alpha-ssl
+#        - name: ca-certs
+#          secret:
+#            secretName: minio-alpha-ssl
         - name: data
           hostPath:
             path: /mnt/minio/data1 # Specify a path to a local drive or volume on the Kubernetes worker node
             type: DirectoryOrCreate # The path to the last directory must exist
+        - name: ssl-certs
+          hostPath:
+            path: /etc/ssl/certs
       containers:
       - name: minio
-        image: quay.io/minio/minio:latest
+        image: minio/minio:RELEASE.2022-01-27T01-16-20Z # quay.io/minio/minio:latest
         volumeMounts:
 #          - name: ca-certificates #name of volume of pod
 #            mountPath: /etc/ssl/certs #directory in container
 #            readOnly: true
           - mountPath: /data #directory in container
             name: data #name of volumes of pod
-          - mountPath: /etc/ssl/certs/ca-certificates.crt
-            name: ca-certs
-            subPath: alpha-root.crt       
+#          - mountPath: /etc/ssl/certs/ca-certificates.crt
+#            name: ca-certs
+#            subPath: alpha-root.crt
+          - name: ssl-certs
+            mountPath: /etc/ssl/certs
+            readOnly: true
         imagePullPolicy: IfNotPresent
         env:
         - name: MINIO_BROWSER_ROOTCERTS
@@ -44,6 +50,8 @@ spec:
           value: "minio"
         - name: MINIO_SECRET_KEY
           value: "minio#123"
+        - name: MINIO_SERVER_CA_CERTS
+          value: /etc/ssl/certs/ca-bundle.crt
         livenessProbe:
           httpGet:
             path: /minio/health/live
