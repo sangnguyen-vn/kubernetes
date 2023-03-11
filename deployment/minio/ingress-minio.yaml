@@ -5,7 +5,18 @@ metadata:
   namespace: minio
   annotations:
 #    cert-manager.io/cluster-issuer: letsencrypt-prod
-    nginx.ingress.kubernetes.io/ssl-certificate: "ingress-alpha-root"
+#    nginx.ingress.kubernetes.io/ssl-certificate: "ingress-alpha-root"
+#  annotations:
+    # Enable client certificate authentication
+    nginx.ingress.kubernetes.io/auth-tls-verify-client: "on"
+    # Create the secret containing the trusted ca certificates
+    nginx.ingress.kubernetes.io/auth-tls-secret: "minio/ca-minio"
+    # Specify the verification depth in the client certificates chain
+    nginx.ingress.kubernetes.io/auth-tls-verify-depth: "1"
+    # Specify an error page to be redirected to verification errors
+    # nginx.ingress.kubernetes.io/auth-tls-error-page: "http://www.mysite.com/error-cert.html"
+    # Specify if certificates are passed to upstream server
+    nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream: "true"    
 spec:
   ingressClassName: nginx
   rules:
@@ -32,7 +43,7 @@ spec:
   tls:
     - hosts:
       - vpo-minio.cloudteam.vn
-      secretName: minio-tls
+      secretName: tls-minio
     - hosts:
       - vpo-minios3.cloudteam.vn
-      secretName: minio-tls
+      secretName: tls-minio
