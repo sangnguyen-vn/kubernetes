@@ -14,9 +14,9 @@ spec:
         app: minio
     spec:
       volumes:
-#        - name: ca-certificates
-#          configMap:
-#            name: ca-certificates
+        - name: ca-certificates
+          configMap:
+            name: ca-certificates
 #        - name: ca-certs
 #          secret:
 #            secretName: minio-alpha-ssl
@@ -24,9 +24,9 @@ spec:
           hostPath:
             path: /mnt/minio/data1 # Specify a path to a local drive or volume on the Kubernetes worker node
             type: DirectoryOrCreate # The path to the last directory must exist
-        - name: ssl-certs
-          hostPath:
-            path: /root/YAML/ssl
+#        - name: ssl-certs
+#         hostPath:
+#            path: /root/YAML/ssl
       containers:
       - name: minio
         image: quay.io/minio/minio:latest
@@ -34,24 +34,25 @@ spec:
 #          - name: ca-certificates #name of volume of pod
 #            mountPath: /etc/ssl/certs #directory in container
 #            readOnly: true
-          - mountPath: /data #directory in container
-            name: data #name of volumes of pod
-#          - mountPath: /etc/ssl/certs/ca-certificates.crt
-#            name: ca-certs
-#            subPath: alpha-root.crt
-          - name: ssl-certs
-            mountPath: /etc/ssl/certs
+          - mountPath: /data # mount this directory of containter
+            name: data # name to communicate
+          - mountPath: /etc/ssl/certs
+            name: ca-certificates
             readOnly: true
+#            subPath: alpha-root.crt
+#          - name: ssl-certs
+#            mountPath: /etc/ssl/certs
+#            readOnly: true
         imagePullPolicy: IfNotPresent
         env:
-        - name: MINIO_BROWSER_ROOTCERTS
-          value: /etc/ssl/certs/ca-bundle.trust.crt
+#        - name: MINIO_BROWSER_ROOTCERTS
+#          value: /etc/ssl/certs/ca-certificates
         - name: MINIO_ACCESS_KEY
           value: "minio"
         - name: MINIO_SECRET_KEY
           value: "minio#123"
         - name: MINIO_SERVER_CA_CERTS
-          value: /etc/ssl/certs/ca-bundle.crt
+          value: /etc/ssl/certs/ca-certificates
         livenessProbe:
           httpGet:
             path: /minio/health/live
