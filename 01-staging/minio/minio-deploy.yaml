@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minio
+  namespace: minio
+  labels:
+    app: minio
+spec:
+  replicas: 2
+  template:
+    metadata:
+      name: minio
+      labels:
+        app: minio
+    spec:
+      volumes:
+        - name: ca-certificates
+          configMap:
+            name: ca-certificates
+        - name: data
+          hostPath:
+            path: /mnt/minio/data1 # Specify a path to a local drive or volume on the Kubernetes worker node
+            type: DirectoryOrCreate # The path to the last directory must exist
+      containers:
+      - name: minio
+        env:
+            - name: MINIO_BROWSER_ROOTCERTS
+              value: /etc/ssl/certs/ca.crt
+        image: quay.io/minio/minio:latest
+        volumeMounts:
+          - name: ca-certificates #name of volume of pod
+            mountPath: /etc/ssl/certs #directory in container
+            readOnly: true
+          - mountPath: /data #directory in container
+            name: data #name of volumes of pod
+          - mountPath: /etc/ssl/certs/alpha-root.crt
+		    name: alpha-ssl
+            subPath: alpha-root.crt          
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: MINIO_ACCESS_KEY
+          value: "minio"
+        - name: MINIO_SECRET_KEY
+          value: "minio#123"
+        livenessProbe:
+          httpGet:
+            path: /minio/health/live
+            port: 9000
+          initialDelaySeconds: 120
+          periodSeconds: 20
+        readinessProbe:
+          httpGet:
+            path: /minio/health/ready
+            port: 9000
+          initialDelaySeconds: 120
+          periodSeconds: 20
+        resources:
+          requests:
+            memory: "1000Mi"
+            cpu: "1000m"
+          limits:
+            memory: "1500Mi"
+            cpu: "1500m"
+        command:
+          - /bin/bash
+          - -c
+        args:
+          - minio server /data --console-address :9090
+          - --certs-dir=/etc/ssl/certs
+#      restartPolicy: Always
+      nodeSelector:
+        kubernetes.io/hostname: docker02.cloudteam.vn # Specify a node label associated to the Worker Node on which you want to deploy the pod.
+  selector:
+    matchLabels:
+      app: minio
+
