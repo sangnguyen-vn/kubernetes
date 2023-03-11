@@ -26,10 +26,10 @@ spec:
             type: DirectoryOrCreate # The path to the last directory must exist
         - name: ssl-certs
           hostPath:
-            path: /etc/ssl/certs
+            path: /root/YAML/ssl
       containers:
       - name: minio
-        image: minio/minio:RELEASE.2022-01-27T01-16-20Z # quay.io/minio/minio:latest
+        image: quay.io/minio/minio:latest
         volumeMounts:
 #          - name: ca-certificates #name of volume of pod
 #            mountPath: /etc/ssl/certs #directory in container
