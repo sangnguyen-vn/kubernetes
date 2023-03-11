@@ -1,0 +1,48 @@
+
+####Create configmap:
+kubectl create configmap ca-certificates --from-file=ca.crt=/path/to/ca.crt --namespace minio
+
+####Container load Configmap
+spec:
+  volumes:
+    - name: ca-certificates
+      configMap:
+        name: ca-certificates
+  containers:
+    - name: my-container
+      volumeMounts:
+        - name: ca-certificates
+          mountPath: /etc/ssl/certs
+          readOnly: true
+
+
+####Container set Variable Environment to read the cert by OpenSSL Libary
+spec:
+  containers:
+    - name: my-container
+      env:
+        - name: SSL_CERT_DIR
+          value: /etc/ssl/certs
+
+#### For minio kubernetes
+kubectl create configmap ca-certificates --from-file=ca.crt=ssl/ca.crt
+
+spec:
+  volumes:
+    - name: ca-certificates
+      configMap:
+        name: ca-certificates
+  containers:
+    - name: minio
+      volumeMounts:
+        - name: ca-certificates
+          mountPath: /etc/ssl/certs
+          readOnly: true
+
+
+spec:
+  containers:
+    - name: minio
+      env:
+        - name: MINIO_BROWSER_ROOTCERTS
+          value: /etc/ssl/certs/ca.crt
